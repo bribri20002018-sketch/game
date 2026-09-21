@@ -1,1 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <title>Dragon Game</title>
+
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+
+            width: 100%;
+            height: 100%;
+
+            overflow: hidden;
+
+            background: #071426;
+
+            font-family: Arial, sans-serif;
+        }
+
+        #game {
+            width: 100%;
+            height: 100%;
+
+            position: relative;
+
+            background:
+                linear-gradient(
+                    #38a9e8 0%,
+                    #9ee7ff 55%,
+                    #3c8c35 55%,
+                    #245722 100%
+                );
+        }
+
+        #title {
+            position: absolute;
+
+            top: 40px;
+            left: 0;
+            right: 0;
+
+            text-align: center;
+
+            color: white;
+
+            font-size: 50px;
+
+            text-shadow:
+                0 4px 8px black;
+        }
+
+        #dragon {
+            position: absolute;
+
+            left: 50%;
+            top: 50%;
+
+            transform:
+                translate(-50%, -50%);
+
+            font-size: 150px;
+
+            user-select: none;
+
+            transition:
+                transform 0.05s linear;
+        }
+
+        #instructions {
+            position: absolute;
+
+            left: 50%;
+            bottom: 30px;
+
+            transform:
+                translateX(-50%);
+
+            padding: 15px 25px;
+
+            color: white;
+
+            background:
+                rgba(0,0,0,.65);
+
+            border-radius: 12px;
+
+            text-align: center;
+
+            font-size: 18px;
+        }
+
+        #status {
+            position: absolute;
+
+            top: 20px;
+            left: 20px;
+
+            padding: 12px;
+
+            color: white;
+
+            background:
+                rgba(0,0,0,.6);
+
+            border-radius: 8px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div id="game">
+
+    <div id="title">
+        🐉 DRAGON REALMS
+    </div>
+
+    <div id="status">
+        Press W A S D to move
+    </div>
+
+    <div id="dragon">
+        🐉
+    </div>
+
+    <div id="instructions">
+        <b>W A S D</b> — Move the dragon<br>
+        <b>SPACE</b> — Fly upward<br>
+        <b>SHIFT</b> — Fly downward
+    </div>
+
+</div>
+
+
+<script>
+
+const dragon =
+    document.getElementById("dragon");
+
+
+let x = window.innerWidth / 2;
+
+let y = window.innerHeight / 2;
+
+
+const speed = 8;
+
+
+const keys = {};
+
+
+document.addEventListener(
+    "keydown",
+    function(event) {
+
+        keys[event.key.toLowerCase()] = true;
+
+        if (event.code === "Space") {
+            keys["space"] = true;
+        }
+
+    }
+);
+
+
+document.addEventListener(
+    "keyup",
+    function(event) {
+
+        keys[event.key.toLowerCase()] = false;
+
+        if (event.code === "Space") {
+            keys["space"] = false;
+        }
+
+    }
+);
+
+
+function gameLoop() {
+
+    if (keys["w"]) {
+        y -= speed;
+    }
+
+    if (keys["s"]) {
+        y += speed;
+    }
+
+    if (keys["a"]) {
+        x -= speed;
+    }
+
+    if (keys["d"]) {
+        x += speed;
+    }
+
+    if (keys["space"]) {
+        y -= speed * 2;
+    }
+
+    if (keys["shift"]) {
+        y += speed * 2;
+    }
+
+
+    // Keep dragon inside screen
+
+    x = Math.max(
+        50,
+        Math.min(
+            window.innerWidth - 50,
+            x
+        )
+    );
+
+
+    y = Math.max(
+        100,
+        Math.min(
+            window.innerHeight - 100,
+            y
+        )
+    );
+
+
+    dragon.style.left =
+        x + "px";
+
+
+    dragon.style.top =
+        y + "px";
+
+
+    requestAnimationFrame(
+        gameLoop
+    );
+}
+
+
+gameLoop();
+
+</script>
+
+</body>
+</html>
